@@ -1,0 +1,82 @@
+
+interface SmartDevice {
+    void turnOn();
+    void turnOff();
+}
+
+class SmartFan implements SmartDevice {
+    int speed;
+
+    public void turnOn() {
+        System.out.println("Smart Fan is turned ON");
+    }
+
+    public void turnOff() {
+        System.out.println("Smart Fan is turned OFF");
+    }
+
+    void setSpeed(int speed) {
+        this.speed = speed;
+        System.out.println("Fan speed set to " + speed);
+    }
+}
+
+class SmartLight implements SmartDevice {
+    int brightness;
+
+    public void turnOn() {
+        System.out.println("Smart Light is turned ON");
+    }
+
+    public void turnOff() {
+        System.out.println("Smart Light is turned OFF");
+    }
+
+    void setBrightness(int brightness) {
+        this.brightness = brightness;
+        System.out.println("Light brightness set to " + brightness);
+    }
+}
+
+class SmartAC implements SmartDevice {
+    int temperature;
+
+    public void turnOn() {
+        System.out.println("Smart AC is turned ON");
+    }
+
+    public void turnOff() {
+        System.out.println("Smart AC is turned OFF");
+    }
+
+    void setTemperature(int temperature) {
+        this.temperature = temperature;
+        System.out.println("AC temperature set to " + temperature);
+    }
+}
+
+public class SmartHomeDemo {
+    public static void main(String[] args) {
+        SmartDevice device;
+
+        SmartFan fan = new SmartFan();
+        SmartLight light = new SmartLight();
+        SmartAC ac = new SmartAC();
+
+        device = fan;
+        device.turnOn();
+        device.turnOff();
+
+        device = light;
+        device.turnOn();
+        device.turnOff();
+
+        device = ac;
+        device.turnOn();
+        device.turnOff();
+
+        fan.setSpeed(3);
+        light.setBrightness(80);
+        ac.setTemperature(24);
+    }
+}
