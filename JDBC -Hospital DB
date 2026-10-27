@@ -1,0 +1,150 @@
+
+import java.sql.*;
+import java.util.Scanner;
+
+public class HospitalManagement {
+    static final String URL = "jdbc:mysql://localhost:3306/HospitalDB";
+    static final String USER = "root";
+    static final String PASS = "your_password";
+
+    static Connection con;
+    static Scanner sc = new Scanner(System.in);
+
+    public static void main(String[] args) {
+        try {
+            con = DriverManager.getConnection(URL, USER, PASS);
+            System.out.println("Database connected successfully.");
+
+            int choice;
+            do {
+                System.out.println("\n1. Insert Patient Record");
+                System.out.println("2. Update Patient Record");
+                System.out.println("3. Delete Patient Record");
+                System.out.println("4. Display Patient Records");
+                System.out.println("5. Exit");
+                System.out.print("Enter choice: ");
+                choice = sc.nextInt();
+                sc.nextLine();
+
+                switch (choice) {
+                    case 1: insert(); break;
+                    case 2: update(); break;
+                    case 3: delete(); break;
+                    case 4: display(); break;
+                    case 5:
+                        System.out.println("Exiting Hospital Management System.");
+                        break;
+                    default:
+                        System.out.println("Invalid choice.");
+                }
+            } while (choice != 5);
+
+            con.close();
+            sc.close();
+        } catch (SQLException e) {
+            System.out.println("Database error: " + e.getMessage());
+        }
+    }
+
+    static void insert() throws SQLException {
+        System.out.print("Patient ID: ");
+        int id = sc.nextInt();
+        sc.nextLine();
+
+        System.out.print("Patient Name: ");
+        String name = sc.nextLine();
+        System.out.print("Age: ");
+        int age = sc.nextInt();
+        sc.nextLine();
+        System.out.print("Gender: ");
+        String gender = sc.nextLine();
+        System.out.print("Disease: ");
+        String disease = sc.nextLine();
+        System.out.print("Contact Number: ");
+        String contact = sc.nextLine();
+
+        String sql = "INSERT INTO Patient VALUES(?,?,?,?,?,?)";
+        PreparedStatement ps = con.prepareStatement(sql);
+        ps.setInt(1, id);
+        ps.setString(2, name);
+        ps.setInt(3, age);
+        ps.setString(4, gender);
+        ps.setString(5, disease);
+        ps.setString(6, contact);
+
+        ps.executeUpdate();
+        ps.close();
+        System.out.println("Patient record inserted successfully.");
+    }
+
+    static void update() throws SQLException {
+        System.out.print("Enter Patient ID: ");
+        int id = sc.nextInt();
+        sc.nextLine();
+
+        System.out.print("New Patient Name: ");
+        String name = sc.nextLine();
+        System.out.print("New Age: ");
+        int age = sc.nextInt();
+        sc.nextLine();
+        System.out.print("New Gender: ");
+        String gender = sc.nextLine();
+        System.out.print("New Disease: ");
+        String disease = sc.nextLine();
+        System.out.print("New Contact Number: ");
+        String contact = sc.nextLine();
+
+        String sql = "UPDATE Patient SET patientName=?, age=?, "
+                + "gender=?, disease=?, contact=? WHERE patientId=?";
+        PreparedStatement ps = con.prepareStatement(sql);
+        ps.setString(1, name);
+        ps.setInt(2, age);
+        ps.setString(3, gender);
+        ps.setString(4, disease);
+        ps.setString(5, contact);
+        ps.setInt(6, id);
+
+        int rows = ps.executeUpdate();
+        System.out.println(rows > 0
+                ? "Patient record updated successfully."
+                : "Patient record not found.");
+        ps.close();
+    }
+
+    static void delete() throws SQLException {
+        System.out.print("Enter Patient ID: ");
+        int id = sc.nextInt();
+
+        String sql = "DELETE FROM Patient WHERE patientId=?";
+        PreparedStatement ps = con.prepareStatement(sql);
+        ps.setInt(1, id);
+
+        int rows = ps.executeUpdate();
+        System.out.println(rows > 0
+                ? "Patient record deleted successfully."
+                : "Patient record not found.");
+        ps.close();
+    }
+
+    static void display() throws SQLException {
+        String sql = "SELECT * FROM Patient";
+        PreparedStatement ps = con.prepareStatement(sql);
+        ResultSet rs = ps.executeQuery();
+
+        if (!rs.isBeforeFirst()) {
+            System.out.println("No patient records found.");
+        }
+
+        while (rs.next()) {
+            System.out.println("\nPatient ID: " + rs.getInt("patientId"));
+            System.out.println("Name: " + rs.getString("patientName"));
+            System.out.println("Age: " + rs.getInt("age"));
+            System.out.println("Gender: " + rs.getString("gender"));
+            System.out.println("Disease: " + rs.getString("disease"));
+            System.out.println("Contact: " + rs.getString("contact"));
+        }
+
+        rs.close();
+        ps.close();
+    }
+}
