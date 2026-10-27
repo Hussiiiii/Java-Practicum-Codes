@@ -1,0 +1,96 @@
+
+class Customer {
+    String customerId, customerName, contactNumber;
+
+    Customer(String id, String name, String contact) {
+        customerId = id;
+        customerName = name;
+        contactNumber = contact;
+    }
+
+    void display() {
+        System.out.println("Customer ID: " + customerId);
+        System.out.println("Name: " + customerName);
+        System.out.println("Contact: " + contactNumber);
+    }
+}
+
+class Loan {
+    String loanNumber, loanType;
+    double loanAmount;
+
+    Loan(String number, String type, double amount) {
+        loanNumber = number;
+        loanType = type;
+        loanAmount = amount;
+    }
+
+    void display() {
+        System.out.println("Loan Number: " + loanNumber);
+        System.out.println("Loan Type: " + loanType);
+        System.out.println("Loan Amount: Rs." + loanAmount);
+    }
+}
+
+class Account {
+    String accountNumber, accountType;
+    double balance;
+
+    Account(String number, String type, double balance) {
+        accountNumber = number;
+        accountType = type;
+        this.balance = balance;
+    }
+
+    void deposit(double amount) {
+        if (amount > 0) {
+            balance += amount;
+            System.out.println("Deposited: Rs." + amount);
+        } else {
+            System.out.println("Invalid deposit amount");
+        }
+    }
+
+    void withdraw(double amount) {
+        if (amount <= 0) {
+            System.out.println("Invalid withdrawal amount");
+        } else if (amount > balance) {
+            System.out.println("Insufficient balance");
+        } else {
+            balance -= amount;
+            System.out.println("Withdrawn: Rs." + amount);
+        }
+    }
+
+    void display() {
+        System.out.println("Account Number: " + accountNumber);
+        System.out.println("Account Type: " + accountType);
+        System.out.println("Balance: Rs." + balance);
+    }
+}
+
+public class BankManagement {
+    public static void main(String[] args) {
+        Customer c = new Customer("C101", "Rahul", "9876543210");
+        Loan l = new Loan("L201", "Home Loan", 500000);
+        Account a = new Account("A301", "Savings", 20000);
+
+        System.out.println("--- Customer Details ---");
+        c.display();
+
+        System.out.println("\n--- Loan Details ---");
+        l.display();
+
+        System.out.println("\n--- Account Details ---");
+        a.display();
+
+        System.out.println("\n--- Transactions ---");
+        a.deposit(10000);
+        a.withdraw(5000);
+        a.display();
+
+        System.out.println("\n--- Invalid Transactions ---");
+        a.withdraw(50000);
+        a.deposit(-2000);
+    }
+}
