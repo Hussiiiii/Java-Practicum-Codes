@@ -1,0 +1,120 @@
+
+import java.util.ArrayList;
+import java.util.Scanner;
+
+class Student {
+    int id, semester;
+    String name, course;
+
+    Student(int id, String name, String course, int semester) {
+        this.id = id;
+        this.name = name;
+        this.course = course;
+        this.semester = semester;
+    }
+
+    void display() {
+        System.out.println("ID: " + id + ", Name: " + name
+                + ", Course: " + course + ", Semester: " + semester);
+    }
+}
+
+public class StudentManagement {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        ArrayList<Student> list = new ArrayList<>();
+        int choice;
+
+        do {
+            System.out.println("\n1.Add Student  2.Remove Student");
+            System.out.println("3.Search Student  4.Display All  5.Exit");
+            System.out.print("Enter choice: ");
+            choice = sc.nextInt();
+            sc.nextLine();
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter ID: ");
+                    int id = sc.nextInt();
+                    sc.nextLine();
+
+                    boolean exists = false;
+                    for (Student s : list) {
+                        if (s.id == id) {
+                            exists = true;
+                            break;
+                        }
+                    }
+
+                    if (exists) {
+                        System.out.println("Student ID already exists.");
+                        break;
+                    }
+
+                    System.out.print("Enter name: ");
+                    String name = sc.nextLine();
+                    System.out.print("Enter course: ");
+                    String course = sc.nextLine();
+                    System.out.print("Enter semester: ");
+                    int sem = sc.nextInt();
+
+                    list.add(new Student(id, name, course, sem));
+                    System.out.println("Student record added successfully.");
+                    break;
+
+                case 2:
+                    System.out.print("Enter student ID to remove: ");
+                    id = sc.nextInt();
+                    boolean removed = false;
+
+                    for (int i = 0; i < list.size(); i++) {
+                        if (list.get(i).id == id) {
+                            list.remove(i);
+                            removed = true;
+                            break;
+                        }
+                    }
+
+                    System.out.println(removed
+                            ? "Student record removed successfully."
+                            : "Student record not found.");
+                    break;
+
+                case 3:
+                    System.out.print("Enter student ID to search: ");
+                    id = sc.nextInt();
+                    boolean found = false;
+
+                    for (Student s : list) {
+                        if (s.id == id) {
+                            s.display();
+                            found = true;
+                            break;
+                        }
+                    }
+
+                    if (!found)
+                        System.out.println("Student record not found.");
+                    break;
+
+                case 4:
+                    if (list.isEmpty()) {
+                        System.out.println("No student records available.");
+                    } else {
+                        for (Student s : list)
+                            s.display();
+                    }
+                    break;
+
+                case 5:
+                    System.out.println("Exiting Student Record Management System.");
+                    break;
+
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        } while (choice != 5);
+
+        sc.close();
+    }
+}
