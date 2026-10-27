@@ -1,0 +1,60 @@
+
+class InsufficientBalanceException extends Exception {
+    InsufficientBalanceException(String message) {
+        super(message);
+    }
+}
+
+class Account {
+    String accountHolderName;
+    double balance;
+
+    Account(String name, double balance) {
+        accountHolderName = name;
+        this.balance = balance;
+    }
+
+    void withdraw(double amount) throws InsufficientBalanceException {
+        if (amount <= 0) {
+            throw new IllegalArgumentException(
+                "Withdrawal amount must be positive"
+            );
+        }
+
+        if (amount > balance) {
+            throw new InsufficientBalanceException(
+                "Insufficient balance! Available balance: Rs." + balance
+            );
+        }
+
+        balance -= amount;
+        System.out.println("Withdrawal successful: Rs." + amount);
+    }
+
+    void displayBalance() {
+        System.out.println("Account Holder: " + accountHolderName);
+        System.out.println("Available Balance: Rs." + balance);
+    }
+}
+
+public class ATMSystem {
+    public static void main(String[] args) {
+        Account account = new Account("Rahul", 10000);
+
+        account.displayBalance();
+
+        try {
+            account.withdraw(3000);
+            account.displayBalance();
+
+            account.withdraw(8000);
+        } catch (InsufficientBalanceException e) {
+            System.out.println("Error: " + e.getMessage());
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error: " + e.getMessage());
+        } finally {
+            System.out.println("ATM transaction completed.");
+            account.displayBalance();
+        }
+    }
+}
